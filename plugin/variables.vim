@@ -1,9 +1,38 @@
 
-if !exists('g:mkd_tag_prefixes')
-  let g:mkd_tag_prefixes = '\[!+&:]'
+if !exists('g:mkdd_tag_prefixes')
+  let g:mkdd_tag_prefixes = '\[!+&:]'
 endif
 
-if !exists('g:mkd_task_done_symbols')
-  let g:mkd_task_done_symbols = '[xX✓]'
+if !exists('g:mkdd_task_done_symbols')
+  let g:mkdd_task_done_symbols = '[xX✓]'
 endif
+
+if !exists('g:mkdd_mapping_switch_status')
+  let g:mkdd_mapping_switch_status = '<c-space>'
+endif
+
+if !exists('g:mkdd_wiki_index_key')
+  let g:mkdd_wiki_index_key = '<leader>W'
+endif
+
+if !exists('g:mkdd_blog_index_key')
+  let g:mkdd_blog_index_key = '<leader>B'
+endif
+
+if !exists('g:mkdd_rxHeader')
+  let g:mkdd_rxHeader = '#'
+endif
+
+if !exists('g:mkdd_rxListItem')
+  let g:mkdd_rxListItem = '^\s*[*-]\s'
+endif
+
+if !exists('g:wiki_dir')
+  let g:wiki_dir = '~/wiki/'
+endif
+
+if !exists('g:blog_dir')
+  let g:blog_dir =  '~/blog/'
+endif
+
 

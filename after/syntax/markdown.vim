@@ -52,8 +52,8 @@ execute 'syntax match mkdToday /\s\='.strftime("%Y-%m-%d").':/ containedin=mkdNo
 execute 'syntax match mkdToday /\v\@'.strftime("%Y-%m-%d").'\s=[-]\s=\d{4}-\d\d-\d\d\s=\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine'
 execute 'syntax match mkdToday /\v\@\d{4}-\d\d-\d\d\s=[-]\s='.strftime("%Y-%m-%d").'\s=\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine'
 
-execute 'syn match mkdListItemDone /^\s*[\-\+\*]\s\[' . g:mkd_task_done_symbols .  '\].*$/ contains=@mkdTag,@mkdTaskTiming'
-execute 'syntax match mkdTag ' . '/\V\zs' . g:mkd_tag_prefixes . '\S\{2,}/ contains=@mkdMath containedin=mkdNonListItem,mkdListItem,mkdListItemLine,@mkdCode,@mkdCodeDelimiter,@mkdCodeStart,@mkdCodeEnd'
+execute 'syn match mkdListItemDone /^\s*[\-\+\*]\s\[' . g:mkdd_task_done_symbols .  '\].*$/ contains=@mkdTag,@mkdTaskTiming'
+execute 'syntax match mkdTag ' . '/\V\zs' . g:mkdd_tag_prefixes . '\S\{2,}/ contains=@mkdMath containedin=mkdNonListItem,mkdListItem,mkdListItemLine,@mkdCode,@mkdCodeDelimiter,@mkdCodeStart,@mkdCodeEnd'
 syntax match mkdImportant /\V \zs\!Important/ containedin=mkdTag,mkdNonListItem,mkdListItem,mkdListItemLine
 syntax match mkdPrio /\V \zs\!\(Prio\|PRIO\|prio\|Priority\|PRIORITY\)/ containedin=mkdTag,mkdNonListItem,mkdListItem,mkdListItemLine
 
@@ -70,7 +70,7 @@ hi link mkdPrio hiPrio
 " DiffChange ErrorMsg Directory Todo Identifier (ctermfg=139 guifg=#b294bb) cssAttr DiffDelete Constant Comment StatusLineNC  hi4TaskDone RedrawDebugRecompose SpellRare SpellBad
 
 
-" let b:current_mkd_syntax = "mkd"
+" let b:current_mkdd_syntax = "mkdd"
 delcommand HiLink
 
 " vim: ts=8
