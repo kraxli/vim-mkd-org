@@ -1,32 +1,49 @@
 
 " {{{ SWITCH STATUS
 " credit: https://github.com/gabrielelana/vim-markdown/blob/master/autoload/markdown.vim
-function! mkdd#ToggleStatus()
-  let current_line = getline('.')
+
+function! mkdd#ToggleStatus(...)
+  if a:0 == 0 | let lineNum = line('.') | else | let lineNum = a:1 | endif
+
+  let current_line = getline(lineNum)
+
   if match(current_line, '^\s*[*\-+] \[ \]') >= 0
-    call setline('.', substitute(current_line, '^\(\s*[*\-+]\) \[ \]', '\1 [x]', ''))
+    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[ \]', '\1 [x]', ''))
     return
   endif
   if match(current_line, '^\s*[*\-+] \[x\]') >= 0
-    call setline('.', substitute(current_line, '^\(\s*[*\-+]\) \[x\]', '\1', ''))
+    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[x\]', '\1', ''))
     return
   endif
   if match(current_line, '^\s*[*\-+] \(\[[x ]\]\)\@!') >= 0
-    call setline('.', substitute(current_line, '^\(\s*[*\-+]\)', '\1 [ ]', ''))
+    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\)', '\1 [ ]', ''))
     return
   endif
   if match(current_line, '^\s*#\{1,5}\s') >= 0
-    call setline('.', substitute(current_line, '^\(\s*#\{1,5}\) \(.*$\)', '\1# \2', ''))
+    call setline(lineNum, substitute(current_line, '^\(\s*#\{1,5}\) \(.*$\)', '\1# \2', ''))
     return
   endif
   if match(current_line, '^\s*#\{6}\s') >= 0
-    call setline('.', substitute(current_line, '^\(\s*\)#\{6} \(.*$\)', '\1# \2', ''))
+    call setline(lineNum, substitute(current_line, '^\(\s*\)#\{6} \(.*$\)', '\1# \2', ''))
     return
   endif
 endfunction
 " }}}
 
-" {{{
+
+" {{{ SWITCH STATUS OF RANGE
+function! mkdd#ToggleStatusRange() range
+  let line_start = getpos("'<")[1]
+  let line_end = getpos("'>")[1]
+
+  for num in range(line_start, line_end)
+    call mkdd#ToggleStatus(num)
+  endfor
+endfunction
+" }}}
+
+
+" {{{ MOVE FOLD TO END
 function! mkdd#MoveFoldToFileEnd()
 
   let line_number = line('.')
