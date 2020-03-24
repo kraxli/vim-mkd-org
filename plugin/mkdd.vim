@@ -5,7 +5,7 @@
 " command! -range ToggleStatusRange call mkdd#ToggleStatusRange(range(line(<line1>), line(<line2>)))
 command! -range ToggleStatusRange call mkdd#ToggleStatusRange()
 command! ToggleStatus call mkdd#ToggleStatus()
-command! TasksOpen call tools#unfold_open_tasks()
+command! TasksOpen call mkdd#unfold_open_tasks()
 command! TasksOpenHi silent :let @/='^\s*-\s\[\s\]'|set hls
 command! MoveFold2End call mkdd#MoveFoldToFileEnd()
 
