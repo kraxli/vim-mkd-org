@@ -4,7 +4,7 @@
 " command! -buffer -range ToggleStatus call markdown#ToggleStatus()
 " command! -range ToggleStatusRange call mkdd#ToggleStatusRange(range(line(<line1>), line(<line2>)))
 command! -range ToggleStatusRange call mkdd#ToggleStatusRange()
-command! -range -nargs=? NumberdList call mkdd#NumberedList(<f-args>)
+command! -range -nargs=? NumberedList call mkdd#NumberedList(<f-args>)
 command! ToggleStatus call mkdd#ToggleStatus()
 command! TasksOpen call mkdd#unfold_open_tasks()
 command! TasksOpenHi silent :let @/='^\s*-\s\[\s\]'|set hls
@@ -12,12 +12,16 @@ command! MoveFold2End call mkdd#MoveFoldToFileEnd()
 
 augroup mkdd_cmd
   autocmd!
+
+  if !hasmapto('NumberedList')
+    au Filetype markdown,text execute 'vnoremap <silent> <buffer> tln :NumberedList<cr>'
+  endif
+
   if !hasmapto('ToggleStatus')
     " TODO let filetype list be determined by the user via a variable
     au Filetype markdown,text
       \ execute 'nnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status . ' :ToggleStatus<cr>'
   endif
-
 
   if !hasmapto('ToggleStatusRange')
     " TODO let filetype list be determined by the user via a variable
