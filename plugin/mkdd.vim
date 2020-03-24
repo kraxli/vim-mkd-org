@@ -4,6 +4,7 @@
 " command! -buffer -range ToggleStatus call markdown#ToggleStatus()
 " command! -range ToggleStatusRange call mkdd#ToggleStatusRange(range(line(<line1>), line(<line2>)))
 command! -range ToggleStatusRange call mkdd#ToggleStatusRange()
+command! -range -nargs=? NumberdList call mkdd#NumberedList(<f-args>)
 command! ToggleStatus call mkdd#ToggleStatus()
 command! TasksOpen call mkdd#unfold_open_tasks()
 command! TasksOpenHi silent :let @/='^\s*-\s\[\s\]'|set hls

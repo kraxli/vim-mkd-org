@@ -1,4 +1,20 @@
 
+" {{{ SWITCH STATUS OF RANGE
+function! mkdd#NumberedList(...) range
+  if a:0 != 0 | let style=a:1 | else | let style='.' | endif
+  let line_start = getpos("'<")[1]
+  let line_end = getpos("'>")[1]
+
+  for num in range(line_start, line_end)
+    let current_line = getline(num)
+    let listNum = num - line_start + 1
+
+    " TODO allow for other list types as (capital) roman numbers, (capital) letters
+    call setline(num, substitute(current_line, '^\(\s*\)', '\1' . listNum . style . ' ', ''))
+  endfor
+endfunction
+" }}}
+
 " {{{ SWITCH STATUS
 " credit: https://github.com/gabrielelana/vim-markdown/blob/master/autoload/markdown.vim
 
