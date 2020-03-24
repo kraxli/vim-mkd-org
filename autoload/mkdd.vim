@@ -1,6 +1,7 @@
 
 " {{{ SWITCH STATUS OF RANGE
 function! mkdd#NumberedList(...) range
+  " or simply use !cat -n on selected range
   if a:0 != 0 | let style=a:1 | else | let style='.' | endif
   let line_start = getpos("'<")[1]
   let line_end = getpos("'>")[1]
