@@ -87,9 +87,17 @@ function mkdd#unfold_open_tasks()
   " execute "g/^\\s*[-+\\*]\\{1}\\s\\[\\s\\]/normal! zv"
   " If you want all subfolds opened as well, use normal! zvzO instead
 
-  execute "Fp ^\\s*[-+\\*]\\{1}\\s\\[\\s\\]"
+  " execute 'Fp \V\(\^\s\*\[-+*]\{1}\s[\s]\)' -> works
+  " execute 'Fp \V\(foo\|todo\)' -> works
+
+
+  " execute 'Fp ^\\s*[-+\\*]\\{1}\\s\\[\\s\\]' -> works
+  execute 'Fp \V\(\^\s\*\[-+*]\{1}\s[\s]\|\s\*#\{1,6}\.\*\)'
 endfunction
 " }}}
+
+  " execute 'Fp \V\(\^\s\*\[-+*]\{1}\s[\s]\|\s\*#\{1,6}.\*\)'
+" |#\\{1,6}.*\\)
 
 
 " vim:foldmethod=marker

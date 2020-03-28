@@ -1,13 +1,12 @@
 
 " Switch status of things
 " TODO allow for ranges
-" command! -buffer -range ToggleStatus call markdown#ToggleStatus()
-" command! -range ToggleStatusRange call mkdd#ToggleStatusRange(range(line(<line1>), line(<line2>)))
 command! -range ToggleStatusRange call mkdd#ToggleStatusRange()
 command! -range -nargs=? NumberedList call mkdd#NumberedList(<f-args>)
 command! ToggleStatus call mkdd#ToggleStatus()
-command! TasksOpen call mkdd#unfold_open_tasks()
 command! TasksOpenHi silent :let @/='^\s*-\s\[\s\]'|set hls
+command! TasksOpen silent :execute 'Fp \V\^\s\*\(\[-+*]\{1}\s[\s]\|\s\*#\{1,6}\.\*\)'|let @/='^\s*-\s\[\s\]'|set hls
+" command! TasksOpen call mkdd#unfold_open_tasks()
 command! MoveFold2End call mkdd#MoveFoldToFileEnd()
 
 augroup mkdd_cmd
