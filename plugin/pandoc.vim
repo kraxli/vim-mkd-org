@@ -6,9 +6,10 @@ command! Pandoc2Doc :call pandoc#base('doc')
 command! Pandoc2Epub :call pandoc#base('epub')
 command! Pandoc2Html :call pandoc#base('html',
   \ '--mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"',
-  \ '--css ' . s:path_plugin . '  /templates/pandoc_killercup.css',
-  \ '-M date="`date "+%B %e, %Y"`"'
+  \ '--css ' . s:path_plugin . '/templates/pandoc_killercup.css'
   \ )
+" \ '-M date="`date "+%B %e, %Y"`"'
+
 command! PandocPublish :call s:pandocPublish()
 
 command! -nargs=1 PandocLib :pandoc %:p

@@ -5,9 +5,10 @@ function! pandoc#base(out, ...)
     let executionStr = executionStr . ' ' . item
   endfor
 
+  echo executionStr
+
   execute('AsyncRun pandoc %:p
     \ -s
-    \ -N
     \ -o %:p:h/%:p:t:r.' . a:out . '
     \ --toc
     \ --toc-depth=2
@@ -16,7 +17,6 @@ function! pandoc#base(out, ...)
     \ --variable linkcolor=blue
     \ --variable citecolor=blue
     \ --variable urlcolor=blue
-    \ --number-sections
     \ --filter pandoc-eqnos
     \ --filter pandoc-tablenos
     \ --filter pandoc-fignos
@@ -24,5 +24,6 @@ function! pandoc#base(out, ...)
 endfunction
 
 " \ -o %:p:h/html/%:p:t:r.html
+" \ --number-sections or -N
 
 
