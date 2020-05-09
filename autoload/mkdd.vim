@@ -25,17 +25,23 @@ function! mkdd#ToggleStatus(...)
   let current_line = getline(lineNum)
 
   if match(current_line, '^\s*[*\-+] \[ \]') >= 0
-    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[ \]', '\1 [x]', ''))
+    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[ \]', '\1 [-]', ''))
+    return
+  endif
+  if match(current_line, '^\s*[*\-+] \[-\]') >= 0
+    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[-\]', '\1 [x]', ''))
     return
   endif
   if match(current_line, '^\s*[*\-+] \[x\]') >= 0
     call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[x\]', '\1', ''))
+    " call setline(lineNum, substitute(current_line, '^\s*[*\-+] \[x\]', '', ''))
     return
   endif
   if match(current_line, '^\s*[*\-+] \(\[[x ]\]\)\@!') >= 0
     call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\)', '\1 [ ]', ''))
     return
   endif
+
   if match(current_line, '^\s*#\{1,5}\s') >= 0
     call setline(lineNum, substitute(current_line, '^\(\s*#\{1,5}\) \(.*$\)', '\1# \2', ''))
     return
@@ -44,6 +50,13 @@ function! mkdd#ToggleStatus(...)
     call setline(lineNum, substitute(current_line, '^\(\s*\)#\{6} \(.*$\)', '\1# \2', ''))
     return
   endif
+
+  "   " if match(current_line, '^\s*[^*\-+] ') >= 0
+  " if match(current_line, '^\s*\S') >= 0
+  "   call setline(lineNum, substitute(current_line, '^\(\s*\)\(\S*\) ', '\1- \2', ''))
+  "   return
+  " endif
+
 endfunction
 " }}}
 

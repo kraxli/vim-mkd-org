@@ -25,7 +25,7 @@ augroup mkdd_cmd
   if !hasmapto('ToggleStatusRange')
     " TODO let filetype list be determined by the user via a variable
     au Filetype markdown,text
-      \ execute 'vnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status . ' :ToggleStatusRange<cr>'
+      \ execute 'vnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status . ' :ToggleStatusRange<cr> gv'
   endif
 
   if !hasmapto('MoveFold2End')
