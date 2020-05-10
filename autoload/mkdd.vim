@@ -33,8 +33,7 @@ function! mkdd#ToggleStatusUp(...)
     return
   endif
   if match(current_line, '^\s*[*\-+] \[x\]') >= 0
-    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[x\]', '\1', ''))
-    " call setline(lineNum, substitute(current_line, '^\s*[*\-+] \[x\]', '', ''))
+    call setline(lineNum, substitute(current_line, '^\(\s*\) [*\-+] \[x\]', '\1', ''))
     return
   endif
   if match(current_line, '^\s*[*\-+] \(\[[x ]\]\)\@!') >= 0
@@ -56,6 +55,23 @@ function! mkdd#ToggleStatusUp(...)
   "   call setline(lineNum, substitute(current_line, '^\(\s*\)\(\S*\) ', '\1- \2', ''))
   "   return
   " endif
+
+  if match(current_line, '^\s*[^*\-+]') >= 0
+    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[x\]', '\1', ''))
+    let prev_line = getline(lineNum-1)
+    let nxt_line = getline(lineNum+1)
+
+    if match(prev_line, '^\s*[*\-+]') >= 0
+      let listIndicator = substitute(prev_line, '^\s*', '', '')[0]
+    elseif match(nxt_line, '^\s*[*\-+]') >= 0
+      let listIndicator = substitute(nxt_line, '^\s*', '', '')[0]
+    else
+      let listIndicator = '-'
+    endif
+
+    call setline(lineNum, substitute(current_line, '^\(\s*\)', '\1'. listIndicator .' ', ''))
+    return
+  endif
 
 endfunction
 
