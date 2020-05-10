@@ -12,6 +12,10 @@ if !exists('g:mkdd_mapping_switch_status')
   let g:mkdd_mapping_switch_status = '<c-space>'
 endif
 
+if !exists('g:mkdd_mapping_switch_status_down')
+   let g:mkdd_mapping_switch_status_down = '<c-d>'
+endif
+
 if !exists('g:mkdd_wiki_index_key')
   let g:mkdd_wiki_index_key = '<leader>W'
 endif

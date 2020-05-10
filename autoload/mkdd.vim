@@ -19,7 +19,7 @@ endfunction
 " {{{ SWITCH STATUS
 " credit: https://github.com/gabrielelana/vim-markdown/blob/master/autoload/markdown.vim
 
-function! mkdd#ToggleStatus(...)
+function! mkdd#ToggleStatusUp(...)
   if a:0 == 0 | let lineNum = line('.') | else | let lineNum = a:1 | endif
 
   let current_line = getline(lineNum)
@@ -58,20 +58,111 @@ function! mkdd#ToggleStatus(...)
   " endif
 
 endfunction
+
+function! mkdd#ToggleStatusDown(...)
+  if a:0 == 0 | let lineNum = line('.') | else | let lineNum = a:1 | endif
+
+  let current_line = getline(lineNum)
+
+  if match(current_line, '^\s*[*\-+] \[ \]') >= 0
+    " call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[ \]', '\1 [-]', ''))
+    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[ \]', '\1', ''))
+    return
+  endif
+  if match(current_line, '^\s*[*\-+] \[-\]') >= 0
+    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[-\]', '\1 [ ]', ''))
+    return
+  endif
+  if match(current_line, '^\s*[*\-+] \[x\]') >= 0
+    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[x\]', '\1 [-]', ''))
+    return
+  endif
+  if match(current_line, '^\s*[*\-+] \(\[[x ]\]\)\@!') >= 0
+    call setline(lineNum, substitute(current_line, '^\(\s*\) [*\-+]', '\1', ''))
+    return
+  endif
+
+  if match(current_line, '^\s*[^*\-+]') >= 0
+    let prev_line = getline(lineNum-1)
+    let nxt_line = getline(lineNum+1)
+
+    if match(prev_line, '^\s*[*\-+]') >= 0
+      let listIndicator = substitute(prev_line, '^\s*', '', '')[0]
+    elseif match(nxt_line, '^\s*[*\-+]') >= 0
+      let listIndicator = substitute(nxt_line, '^\s*', '', '')[0]
+    else
+      let listIndicator = '-'
+    endif
+
+    call setline(lineNum, substitute(current_line, '^\(\s*\)', '\1'. listIndicator .' [x] ', ''))
+    return
+  endif
+
+  if match(current_line, '^\s*#\{1,5}\s') >= 0
+    return
+  endif
+  if match(current_line, '^\s*#\{6}\s') >= 0
+    return
+  endif
+
+endfunction
 " }}}
 
 
 " {{{ SWITCH STATUS OF RANGE
-function! mkdd#ToggleStatusRange() range
+function! mkdd#ToggleStatusRangeUp() range
   let line_start = getpos("'<")[1]
   let line_end = getpos("'>")[1]
 
   for num in range(line_start, line_end)
-    call mkdd#ToggleStatus(num)
+    call mkdd#ToggleStatusUp(num)
+  endfor
+endfunction
+
+function! mkdd#ToggleStatusRangeDown() range
+  let line_start = getpos("'<")[1]
+  let line_end = getpos("'>")[1]
+
+  for num in range(line_start, line_end)
+    call mkdd#ToggleStatusDown(num)
   endfor
 endfunction
 " }}}
 
+" {{{ SWITCH HEADER LEVEL
+function! mkdd#HeaderIncrease(...)
+  if a:0 == 0 | let lineNum = line('.') | else | let lineNum = a:1 | endif
+
+  let current_line = getline(lineNum)
+
+  if match(current_line, '^\s*#\{1,6}\s') >= 0
+    call setline(lineNum, substitute(current_line, '^\(\s*#\{1,5}\) \(.*$\)', '\1# \2', ''))
+    return
+  endif
+  if match(current_line, '^\s*[^#]') >= 0
+    call setline(lineNum, substitute(current_line, '^\(\s*\)\(.*$\)', '\1# \2', ''))
+    return
+  endif
+
+endfunction
+
+function! mkdd#HeaderDecrease(...)
+  if a:0 == 0 | let lineNum = line('.') | else | let lineNum = a:1 | endif
+
+  let current_line = getline(lineNum)
+
+  if match(current_line, '^\s*#\{2,6}\s') >= 0
+    call setline(lineNum, substitute(current_line, '^\(\s*#\{1,5}\)# \(.*$\)', '\1 \2', ''))
+    return
+  endif
+  if match(current_line, '^\s*#\{1}\s') >= 0
+    call setline(lineNum, substitute(current_line, '^\(\s*\)# \(.*$\)', '\1\2', ''))
+    return
+  endif
+
+endfunction
+
+" }}}
 
 " {{{ MOVE FOLD TO END
 function! mkdd#MoveFoldToFileEnd()

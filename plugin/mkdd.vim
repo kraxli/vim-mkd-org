@@ -1,13 +1,16 @@
 
 " Switch status of things
 " TODO allow for ranges
-command! -range ToggleStatusRange call mkdd#ToggleStatusRange()
+command! -range ToggleStatusRangeUp call mkdd#ToggleStatusRangeUp()
 command! -range -nargs=? NumberedList call mkdd#NumberedList(<f-args>)
-command! ToggleStatus call mkdd#ToggleStatus()
+command! ToggleStatusUp call mkdd#ToggleStatusUp()
+command! ToggleStatusDown call mkdd#ToggleStatusDown()
 command! TasksOpenHi silent :let @/='^\s*-\s\[\s\]'|set hls
 command! TasksOpen silent :execute 'Fp \V\^\s\*\(\[-+*]\{1}\s[\s]\|\s\*#\{1,6}\.\*\)'|let @/='^\s*-\s\[\s\]'|set hls
 " command! TasksOpen call mkdd#unfold_open_tasks()
 command! MoveFold2End call mkdd#MoveFoldToFileEnd()
+command! HeaderLevelIncrease call mkdd#HeaderIncrease()
+command! HeaderLevelDecrease call mkdd#HeaderDecrease()
 
 augroup mkdd_cmd
   autocmd!
@@ -16,16 +19,28 @@ augroup mkdd_cmd
     au Filetype markdown,text execute 'vnoremap <silent> <buffer> tln :NumberedList<cr>'
   endif
 
-  if !hasmapto('ToggleStatus')
+  if !hasmapto('ToggleStatusUp')
     " TODO let filetype list be determined by the user via a variable
     au Filetype markdown,text
-      \ execute 'nnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status . ' :ToggleStatus<cr>'
+      \ execute 'nnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status . ' :ToggleStatusUp<cr>'
   endif
 
-  if !hasmapto('ToggleStatusRange')
+  if !hasmapto('ToggleStatusRangeUp')
     " TODO let filetype list be determined by the user via a variable
     au Filetype markdown,text
-      \ execute 'vnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status . ' :ToggleStatusRange<cr> gv'
+      \ execute 'vnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status . ' :ToggleStatusRangeUp<cr> gv'
+  endif
+
+  if !hasmapto('ToggleStatusDown')
+    " TODO let filetype list be determined by the user via a variable
+    au Filetype markdown,text
+      \ execute 'nnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status_down . ' :ToggleStatusDown<cr>'
+  endif
+
+  if !hasmapto('ToggleStatusRangeDown')
+    " TODO let filetype list be determined by the user via a variable
+    au Filetype markdown,text
+      \ execute 'vnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status_down . ' :ToggleStatusRangeDown<cr> gv'
   endif
 
   if !hasmapto('MoveFold2End')
@@ -38,6 +53,18 @@ augroup mkdd_cmd
 
   if !hasmapto('TasksOpen')
     nmap <silent> to :TasksOpen<cr>
+  endif
+
+  if !hasmapto('HeaderLevelIncrease')
+    nmap hi :HeaderLevelIncrease<cr>
+    nmap <c-,> :HeaderLevelIncrease<cr>
+    imap <c-,> :HeaderLevelIncrease<cr>
+  endif
+
+  if !hasmapto('HeaderLevelDecrease')
+    nmap hd :HeaderLevelDecrease<cr>
+    nmap <c-;> :HeaderLevelDecrease<cr>
+    imap <c-;> :HeaderLevelDecrease<cr>
   endif
 
   au Filetype markdown,text

@@ -34,29 +34,29 @@ autocmd ColorScheme * hi hiPrio ctermfg=234 ctermbg=167 guifg=#1d1f21 guibg=#cc6
 "  patterns  "
 """"""""""""""
 " Timing needs to come after Project!
-syn match mkdTaskTiming  /\v\d{2}:\d\d/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine
-syn match mkdTaskTiming  /\v\d{4}-\d\d-\d{2}/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine
-syn match mkdTaskTiming  /\v\d:\d\d/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine
-syn match mkdTaskTiming  /\v\d:\d\d-/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine
-syn match mkdTaskTiming  /\v\d{2}:\d\d-/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine
-syn match mkdTaskTiming  /\v\d{2}:\d\d-\d{2}:\d\d/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine
-syn match mkdTaskTiming  /\v\@\d{4}-\d\d-\d\d/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine
-syn match mkdTaskTiming  /\v\@\d{4}-\d\d-\d\d\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine
-syn match mkdTaskTiming  /\v\@\d{4}-\d\d-\d\d\s*-\s*\d{4}-\d\d-\d\d\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine
+syn match mkdTaskTiming  /\v\d{2}:\d\d/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter
+syn match mkdTaskTiming  /\v\d{4}-\d\d-\d{2}/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter
+syn match mkdTaskTiming  /\v\d:\d\d/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter
+syn match mkdTaskTiming  /\v\d:\d\d-/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter
+syn match mkdTaskTiming  /\v\d{2}:\d\d-/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter
+syn match mkdTaskTiming  /\v\d{2}:\d\d-\d{2}:\d\d/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter
+syn match mkdTaskTiming  /\v\@\d{4}-\d\d-\d\d/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter
+syn match mkdTaskTiming  /\v\@\d{4}-\d\d-\d\d\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter
+syn match mkdTaskTiming  /\v\@\d{4}-\d\d-\d\d\s*-\s*\d{4}-\d\d-\d\d\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter
 
-execute 'syntax match mkdToday /' .strftime("%Y-%m-%d"). '/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine'
-execute 'syntax match mkdToday /\[DD: *' .strftime("%Y-%m-%d"). '\]/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine'
-execute 'syntax match mkdToday /@'.strftime("%Y-%m-%d").'/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine'
-execute 'syntax match mkdToday / \='.strftime("%Y-%m-%d").':/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine'
-execute 'syntax match mkdToday /\s\='.strftime("%Y-%m-%d").':/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine'
-execute 'syntax match mkdToday /\v\@'.strftime("%Y-%m-%d").'\s=[-]\s=\d{4}-\d\d-\d\d\s=\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine'
-execute 'syntax match mkdToday /\v\@\d{4}-\d\d-\d\d\s=[-]\s='.strftime("%Y-%m-%d").'\s=\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine'
+execute 'syntax match mkdToday /' .strftime("%Y-%m-%d"). '/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter'
+execute 'syntax match mkdToday /\[DD: *' .strftime("%Y-%m-%d"). '\]/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter'
+execute 'syntax match mkdToday /@'.strftime("%Y-%m-%d").'/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter'
+execute 'syntax match mkdToday / \='.strftime("%Y-%m-%d").':/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter'
+execute 'syntax match mkdToday /\s\='.strftime("%Y-%m-%d").':/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter'
+execute 'syntax match mkdToday /\v\@'.strftime("%Y-%m-%d").'\s=[-]\s=\d{4}-\d\d-\d\d\s=\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter'
+execute 'syntax match mkdToday /\v\@\d{4}-\d\d-\d\d\s=[-]\s='.strftime("%Y-%m-%d").'\s=\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter'
 
-execute 'syn match mkdListItemDone /^\s*[\-\+\*]\s\[' . g:mkdd_task_done_symbols .  '\].*$/ contains=@mkdTag,@mkdTaskTiming'
-execute 'syntax match mkdTag ' . '/\V\zs' . g:mkdd_tag_prefixes . '\[^ ()]\{2,}/ contains=@mkdMath containedin=mkdNonListItem,mkdListItem,mkdListItemLine,@mkdCode,@mkdCodeDelimiter,@mkdCodeStart,@mkdCodeEnd'
+execute 'syn match mkdListItemDone /^\s*[\-\+\*]\s\[' . g:mkdd_task_done_symbols .  '\].*$/ contains=@mkdTag,@mkdTaskTiming containedin=markdownHeadingDelimiter'
+execute 'syntax match mkdTag ' . '/\V\zs' . g:mkdd_tag_prefixes . '\[^ ()]\{2,}/ contains=@mkdMath containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter,markdownListMarker,@mkdCode,@mkdCodeDelimiter,@mkdCodeStart,@mkdCodeEnd'
 " execute 'syntax match mkdTag ' . '/\V\s\zs' . g:mkdd_tag_prefixes . '\(.*\[\/\\].*\)*\@!\S*/ contains=@mkdMath containedin=mkdNonListItem,mkdListItem,mkdListItemLine,@mkdCode,@mkdCodeDelimiter,@mkdCodeStart,@mkdCodeEnd'
-syntax match mkdImportant /\V \zs\!Important/ containedin=mkdTag,mkdNonListItem,mkdListItem,mkdListItemLine
-syntax match mkdPrio /\V \zs\!\(Prio\|PRIO\|prio\|Priority\|PRIORITY\)/ containedin=mkdTag,mkdNonListItem,mkdListItem,mkdListItemLine
+syntax match mkdImportant /\V \zs\!Important/ containedin=mkdTag,mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter,markdownListMarker
+syntax match mkdPrio /\V \zs\!\(Prio\|PRIO\|prio\|Priority\|PRIORITY\)/ containedin=mkdTag,mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter,markdownListMarker
 
 
 """"""""""""""""""""""""""""""
