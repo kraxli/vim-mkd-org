@@ -52,11 +52,11 @@ execute 'syntax match mkdToday /\s\='.strftime("%Y-%m-%d").':/ containedin=mkdNo
 execute 'syntax match mkdToday /\v\@'.strftime("%Y-%m-%d").'\s=[-]\s=\d{4}-\d\d-\d\d\s=\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter'
 execute 'syntax match mkdToday /\v\@\d{4}-\d\d-\d\d\s=[-]\s='.strftime("%Y-%m-%d").'\s=\:/ containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter'
 
-execute 'syn match mkdListItemDone /^\s*[\-\+\*]\s\[' . g:mkdd_task_done_symbols .  '\].*$/ contains=@mkdTag,@mkdTaskTiming containedin=markdownHeadingDelimiter'
-execute 'syntax match mkdTag ' . '/\V\zs' . g:mkdd_tag_prefixes . '\[^ ()]\{2,}/ contains=@mkdMath containedin=mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter,markdownListMarker,@mkdCode,@mkdCodeDelimiter,@mkdCodeStart,@mkdCodeEnd'
+execute 'syn match mkdListItemDone /^\s*[\-\+\*]\s\[' . g:mkdd_task_done_symbols .  '\].*$/ contains=@mkdTag,@mkdTaskTiming containedin=markdownHeadingDelimiter,mkdxListItem'
+execute 'syntax match mkdTag ' . '/\V\zs' . g:mkdd_tag_prefixes . '\[^ ()]\{2,}/ contains=@mkdMath containedin=mkdNonListItem,mkdListItem,mkdListItemLine,mkdxListItem,markdownHeadingDelimiter,markdownListMarker,@mkdCode,@mkdCodeDelimiter,@mkdCodeStart,@mkdCodeEnd'
 " execute 'syntax match mkdTag ' . '/\V\s\zs' . g:mkdd_tag_prefixes . '\(.*\[\/\\].*\)*\@!\S*/ contains=@mkdMath containedin=mkdNonListItem,mkdListItem,mkdListItemLine,@mkdCode,@mkdCodeDelimiter,@mkdCodeStart,@mkdCodeEnd'
-syntax match mkdImportant /\V \zs\!Important/ containedin=mkdTag,mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter,markdownListMarker
-syntax match mkdPrio /\V \zs\!\(Prio\|PRIO\|prio\|Priority\|PRIORITY\)/ containedin=mkdTag,mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter,markdownListMarker
+syntax match mkdImportant /\V \zs\!Important/ containedin=mkdTag,mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter,markdownListMarker,mkdxListItem
+syntax match mkdPrio /\V \zs\!\(Prio\|PRIO\|prio\|Priority\|PRIORITY\)/ containedin=mkdTag,mkdNonListItem,mkdListItem,mkdListItemLine,markdownHeadingDelimiter,markdownListMarker,mkdxListItem
 
 
 """"""""""""""""""""""""""""""
