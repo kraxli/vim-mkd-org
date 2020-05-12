@@ -33,7 +33,7 @@ function! mkdd#ToggleStatusUp(...)
     return
   endif
   if match(current_line, '^\s*[*\-+] \[x\]') >= 0
-    call setline(lineNum, substitute(current_line, '^\(\s*\) [*\-+] \[x\]', '\1', ''))
+    call setline(lineNum, substitute(current_line, '\(^\s*\)[*\-+] \[x\] ', '\1', ''))
     return
   endif
   if match(current_line, '^\s*[*\-+] \(\[[x ]\]\)\@!') >= 0
@@ -94,7 +94,7 @@ function! mkdd#ToggleStatusDown(...)
     return
   endif
   if match(current_line, '^\s*[*\-+] \(\[[x ]\]\)\@!') >= 0
-    call setline(lineNum, substitute(current_line, '^\(\s*\) [*\-+]', '\1', ''))
+    call setline(lineNum, substitute(current_line, '^\(\s*\)[*\-+] ', '\1', ''))
     return
   endif
 
