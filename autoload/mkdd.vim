@@ -24,54 +24,77 @@ function! mkdd#ToggleStatusUp(...)
 
   let current_line = getline(lineNum)
 
-  if match(current_line, '^\s*[*\-+] \[ \]') >= 0
-    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[ \]', '\1 [-]', ''))
-    return
-  endif
-  if match(current_line, '^\s*[*\-+] \[-\]') >= 0
-    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[-\]', '\1 [x]', ''))
-    return
-  endif
-  if match(current_line, '^\s*[*\-+] \[x\]') >= 0
-    call setline(lineNum, substitute(current_line, '\(^\s*\)[*\-+] \[x\] ', '\1', ''))
-    return
-  endif
-  if match(current_line, '^\s*[*\-+] \(\[[x ]\]\)\@!') >= 0
-    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\)', '\1 [ ]', ''))
-    return
+
+  " === Header Toggling ===
+  " header toggling up
+  if match(current_line, '^\s*#\{1,5}\s') >= 0
+    call setline(lineNum, substitute(current_line, '^\(\s*#\{1,5}\) \(.*$\)', '\1# \2', '')) | return
   endif
 
-  if match(current_line, '^\s*#\{1,5}\s') >= 0
-    call setline(lineNum, substitute(current_line, '^\(\s*#\{1,5}\) \(.*$\)', '\1# \2', ''))
-    return
-  endif
+  " header toggling: header level 6 -> header level 1
   if match(current_line, '^\s*#\{6}\s') >= 0
-    call setline(lineNum, substitute(current_line, '^\(\s*\)#\{6} \(.*$\)', '\1# \2', ''))
-    return
+    call setline(lineNum, substitute(current_line, '^\(\s*\)#\{6} \(.*$\)', '\1# \2', '')) | return
   endif
+
+
+  " === List Toggling ===
+  " check box item -> check box item in progress
+  if match(current_line, '^\s*[*\-+] \[ \]') >= 0
+    if !g:mkdd_use_mkdx | call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[ \]', '\1 [-]', '')) | return
+    else | call mkdx#ToggleCheckboxState() | return
+    endif
+  endif
+
+  " check box item in progress -> check box item done
+  if match(current_line, '^\s*[*\-+] \[-\]') >= 0
+    if !g:mkdd_use_mkdx | call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[-\]', '\1 [x]', '')) | return
+    else | call mkdx#ToggleCheckboxState() | return
+    endif
+  endif
+
+  " check box item done -> no list item
+  if match(current_line, '^\s*[*\-+] \[x\]') >= 0
+    if !g:mkdd_use_mkdx | call setline(lineNum, substitute(current_line, '\(^\s*\)[*\-+] \[x\] ', '\1', '')) | return
+    else | call mkdx#ToggleChecklist() | return
+    endif
+  endif
+
+  " regular list item -> to do / check box item
+  if match(current_line, '^\s*[*\-+] \(\[[x ]\]\)\@!') >= 0
+    if !g:mkdd_use_mkdx | call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\)', '\1 [ ]', '')) | return
+    else | call mkdx#ToggleChecklist() | return
+    endif
+  endif
+
+   " no list item -> regular list item
+  if match(current_line, '^\s*[^*\-]') >= 0
+    if !g:mkdd_use_mkdx
+        call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[x\]', '\1', ''))
+        let prev_line = getline(lineNum-1)
+        let nxt_line = getline(lineNum+1)
+
+        if match(prev_line, '^\s*[*\-+]') >= 0
+            let listIndicator = substitute(prev_line, '^\s*', '', '')[0]
+        elseif match(nxt_line, '^\s*[*\-+]') >= 0
+            let listIndicator = substitute(nxt_line, '^\s*', '', '')[0]
+        else
+          let listIndicator = '-'
+        endif
+
+        call setline(lineNum, substitute(current_line, '^\(\s*\)', '\1'. listIndicator .' ', ''))
+        return
+    else
+        call mkdx#ToggleList()
+        return
+    endif
+
+ endif
 
   "   " if match(current_line, '^\s*[^*\-+] ') >= 0
   " if match(current_line, '^\s*\S') >= 0
   "   call setline(lineNum, substitute(current_line, '^\(\s*\)\(\S*\) ', '\1- \2', ''))
   "   return
   " endif
-
-  if match(current_line, '^\s*[^*\-+]') >= 0
-    call setline(lineNum, substitute(current_line, '^\(\s*[*\-+]\) \[x\]', '\1', ''))
-    let prev_line = getline(lineNum-1)
-    let nxt_line = getline(lineNum+1)
-
-    if match(prev_line, '^\s*[*\-+]') >= 0
-      let listIndicator = substitute(prev_line, '^\s*', '', '')[0]
-    elseif match(nxt_line, '^\s*[*\-+]') >= 0
-      let listIndicator = substitute(nxt_line, '^\s*', '', '')[0]
-    else
-      let listIndicator = '-'
-    endif
-
-    call setline(lineNum, substitute(current_line, '^\(\s*\)', '\1'. listIndicator .' ', ''))
-    return
-  endif
 
 endfunction
 

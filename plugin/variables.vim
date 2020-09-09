@@ -1,4 +1,8 @@
 
+if !exists('g:mkdd_use_mkdx')
+  let g:mkdd_use_mkdx = 0
+endif
+
 if !exists('g:mkdd_tag_prefixes')
   let g:mkdd_tag_prefixes = '\[!+&]'
   " let g:mkdd_tag_prefixes = '\[!+&:]'
