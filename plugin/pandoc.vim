@@ -3,6 +3,7 @@ let s:path_plugin = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
 
 command! Pandoc2Pdf :call pandoc#base('pdf')
 command! Pandoc2Doc :call pandoc#base('doc')
+command! Pandoc2Doc :call pandoc#base('docx')
 command! Pandoc2Epub :call pandoc#base('epub')
 command! Pandoc2Html :call pandoc#base('html',
   \ '--mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"',

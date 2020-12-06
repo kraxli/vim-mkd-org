@@ -3,9 +3,9 @@
 " {{{ OPTIONS
 " --------------------------------------------------
 setlocal autoindent
-setl formatoptions=tcroqn2
-setlocal comments=b:*,b:-,b:+,n:>,se:```
-setlocal commentstring=>\ %s
+" setl formatoptions=tcroqn2
+" setlocal comments=b:*,b:-,b:+,n:>,se:```
+" setlocal commentstring=>\ %s
 setl wrap linebreak nolist
 setl breakindent
 setl textwidth=0
