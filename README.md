@@ -4,7 +4,7 @@
 
 - skywind3000/asyncrun.vim
 
-tools and support to use markdown files to organize your work, life, ...
+tools and support to use vimwiki/markdown files to organize your work, life, ...
 
 ## TODOs
 - [ ] replace gx command: defx#util#open(filename)  & `def execute_system of defx`
