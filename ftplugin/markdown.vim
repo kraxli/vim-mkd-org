@@ -2,15 +2,15 @@
 " --------------------------------------------------
 " {{{ OPTIONS
 " --------------------------------------------------
-setlocal autoindent
+" setlocal autoindent
 " setl formatoptions=tcroqn2
 " setlocal comments=b:*,b:-,b:+,n:>,se:```
 " setlocal commentstring=>\ %s
+" setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*[+-\\*]\\s\\+
 setl wrap linebreak nolist
 setl breakindent
 setl textwidth=0
 setl wrapmargin=0 " only used when textwidth=0
-setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*[+-\\*]\\s\\+
 setlocal nolisp
 
 " Enable spelling and completion based on dictionary words

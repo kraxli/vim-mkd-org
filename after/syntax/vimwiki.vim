@@ -64,6 +64,7 @@ syntax match mkdPrio /\V \zs\!\(Prio\|PRIO\|prio\|Priority\|PRIORITY\)/ containe
 """"""""""""""""""""""""""""""
 HiLink mkdTag DiffChange
 hi link mkdListItemDone hiTaskDone
+" hi link VimwikiCheckBoxDone hiTaskDone
 hi link mkdTaskTiming Type
 hi link mkdToday hiToday
 hi link mkdImportant hiImportant

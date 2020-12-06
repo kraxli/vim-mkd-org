@@ -242,6 +242,24 @@ endfunction
   " execute 'Fp \V\(\^\s\*\[-+*]\{1}\s[\s]\|\s\*#\{1,6}.\*\)'
 " |#\\{1,6}.*\\)
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Vimwik snippets
+"  source: https://vimwiki.github.io/vimwikiwiki/Tips%20and%20Snips.html  "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! mkdd#findIncompleteTasks()
+  lvimgrep /- \[[^xX]\]/ %:p
+  lopen
+endfunction
+
+function! mkdd#findAllIncompleteTasks()
+  if exists(':Ag')
+    Ag - \[[^xX]\]
+  else
+    VimwikiSearch /- \[[^xX]\]/
+    lopen
+  endif
+endfunction
 
 " vim:foldmethod=marker
 

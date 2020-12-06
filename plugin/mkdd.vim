@@ -12,6 +12,10 @@ command! MoveFold2End call mkdd#MoveFoldToFileEnd()
 command! HeaderLevelIncrease call mkdd#HeaderIncrease()
 command! HeaderLevelDecrease call mkdd#HeaderDecrease()
 
+command! FindAllIncompletTasks call mkdd#findAllIncompleteTasks()
+command! FindIncompleteTasks call mkdd#findIncompleteTasks()
+
+
 augroup mkdd_cmd
   autocmd!
 
@@ -57,20 +61,31 @@ augroup mkdd_cmd
 
   if !hasmapto('HeaderLevelIncrease')
     nmap hi :HeaderLevelIncrease<cr>
-    nmap <c-,> :HeaderLevelIncrease<cr>
-    imap <c-,> :HeaderLevelIncrease<cr>
+    nmap <silent> <c-,> :HeaderLevelIncrease<cr>
+    imap <silent> <c-,> :HeaderLevelIncrease<cr>
   endif
 
   if !hasmapto('HeaderLevelDecrease')
     nmap hd :HeaderLevelDecrease<cr>
-    nmap <c-;> :HeaderLevelDecrease<cr>
-    imap <c-;> :HeaderLevelDecrease<cr>
+    nmap <silent> <c-;> :HeaderLevelDecrease<cr>
+    imap <silent> <c-;> :HeaderLevelDecrease<cr>
   endif
+
+  if !hasmapto('FindAllIncompletTasks')
+    nmap <silent> <Leader>wa :FindAllIncompletTasks<cr>
+  endif
+
+  if !hasmapto('FindIncompleteTasks')
+    nmap <silent> <Leader>wx :FindIncompleteTasks<cr>
+  endif
+
 
   au Filetype markdown,text
     \ execute 'nnoremap <silent> <buffer> ' . g:mkdd_wiki_index_key . ' :e ' . g:wiki_dir . ' index.md<CR>'
 
   au Filetype markdown,text
     \ execute 'nnoremap <silent> <buffer> ' . g:mkdd_blog_index_key . ' :e ' . g:blog_dir . ' index.md<CR>'
+
+
 
 augroup END

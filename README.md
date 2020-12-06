@@ -3,6 +3,7 @@
 ## Requirement
 
 - skywind3000/asyncrun.vim
+- junegunn/fzf.vim
 
 tools and support to use vimwiki/markdown files to organize your work, life, ...
 
