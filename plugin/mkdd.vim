@@ -1,14 +1,19 @@
 
+""""""""""""""
+"  commands  "
+""""""""""""""
+
 " Switch status of things
-" TODO allow for ranges
-command! -range ToggleStatusRangeUp call mkdd#ToggleStatusRangeUp()
-command! -range -nargs=? NumberedList call mkdd#NumberedList(<f-args>)
 command! ToggleStatusUp call mkdd#ToggleStatusUp()
 command! ToggleStatusDown call mkdd#ToggleStatusDown()
+command! -range ToggleStatusRangeUp call mkdd#ToggleStatusRangeUp()
+command! -range -nargs=? NumberedList call mkdd#NumberedList(<f-args>)
 command! TasksOpenHi silent :let @/='^\s*-\s\[\s\]'|set hls
 command! TasksOpen silent :execute 'Fp \V\^\s\*\(\[-+*]\{1}\s[\s]\|\s\*#\{1,6}\.\*\)'|let @/='^\s*-\s\[\s\]'|set hls
 " command! TasksOpen call mkdd#unfold_open_tasks()
-command! MoveFold2End call mkdd#MoveFoldToFileEnd()
+command! MoveToEnd call mkdd#moveToEnd() " mkdd#MoveFoldToFileEnd()
+command! MoveSelectionToEnd call mkdd#moveSelectionToEnd()
+
 command! HeaderLevelIncrease call mkdd#HeaderIncrease()
 command! HeaderLevelDecrease call mkdd#HeaderDecrease()
 
@@ -16,8 +21,24 @@ command! FindAllIncompletTasks call mkdd#findAllIncompleteTasks()
 command! FindIncompleteTasks call mkdd#findIncompleteTasks()
 
 
+""""""""""""""""""
+"  key mappings  "
+""""""""""""""""""
 augroup mkdd_cmd
   autocmd!
+
+  noremap <leader>td :VimwikiToggleListItem<cr> $"=strftime(" [@DONE: %Y-%m-%d]")<CR>p
+  " http://vim.wikia.com/wiki/Insert_current_date_or_time
+  nnoremap <leader>dt  "='@'.strftime("%Y-%m-%d").':'<CR>P
+  nnoremap <leader>dr "='@'.strftime("%Y-%m-%d").' - '.strftime("%Y-%m-%d").':'<CR>P
+
+  " move tasked-done (closed folds) to end of file
+  " nnoremap <leader>td :.m $<cr>
+  nnoremap <leader>tm :call MoveFoldToFileEnd()<cr>
+  " <leader>tm on visual block (but the following is rather messy and extremly slow):
+  vnoremap <leader>tm :call MoveFoldToFileEnd()<cr>
+
+
 
   if !hasmapto('NumberedList')
     au Filetype markdown,text execute 'vnoremap <silent> <buffer> tln :NumberedList<cr>'
@@ -48,7 +69,8 @@ augroup mkdd_cmd
   endif
 
   if !hasmapto('MoveFold2End')
-    nmap <silent> tm :MoveFold2End<cr>
+    nmap <silent> tm :MoveToEnd<cr>
+    vmap <silent> tm :call mkdd#moveSelectionToEnd()<cr>
   endif
 
   if !hasmapto('TaksOpenHi')

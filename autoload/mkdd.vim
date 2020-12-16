@@ -203,6 +203,30 @@ endfunction
 
 " }}}
 
+" Move line / fold to End {{{
+function! mkdd#moveToEnd()
+    let line_number = line('.')
+    execute "normal! dd G p " . line_number . "G"
+endfunction
+
+function! mkdd#moveSelectionToEnd(...) range
+  " if a:0 != 0 | let style=a:1 | else | let style='.' | endif
+  let visual_start = getpos("'<")[1]
+  let visual_end = getpos("'>")[1]
+
+  execute visual_start . "," . visual_end . "m$"
+  execute "normal! " . visual_start . "G"
+
+  " for num in range(line_start, line_end)
+  "    let current_line = getline(num)
+  "    execute current_line . "m$ "
+  "    execute "normal! " . current_line . "G"
+  "    " let listNum = num - line_start + 1
+  "  endfor
+
+endfunction
+" }}}
+
 " {{{ MOVE FOLD TO END
 function! mkdd#MoveFoldToFileEnd()
 

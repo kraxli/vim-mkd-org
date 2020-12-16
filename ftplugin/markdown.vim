@@ -1,4 +1,6 @@
 
+let s:path_base = expand('<sfile>:p:h:h')
+
 " --------------------------------------------------
 " {{{ OPTIONS
 " --------------------------------------------------
@@ -19,7 +21,7 @@ setlocal nolisp
 " endif
 
 " Custom dictionary for emoji
-execute 'setlocal dictionary+=' . shellescape(expand('<sfile>:p:h:h')) . '/dict/emoticons.dict'
+execute 'setlocal dictionary+=' . shellescape(s:path_base) . '/dict/emoticons.dict'
 setlocal complete+=k
 
 " " if g:markdown_enable_input_abbreviations
@@ -33,5 +35,13 @@ setlocal complete+=k
 "   iabbrev <buffer> << «
 "   iabbrev <buffer> >> »
 " " endif
+
+" SNIPPETS
+" let g:UltiSnipsSnippetDirectories=["UltiSnips", shellescape(s:path_base) . "/snippets/UltiSnips"]
+
+UltiSnipsAddFiletypes markdown.org
+UltiSnipsAddFiletypes vimwiki.org
+UltiSnipsAddFiletypes vimwiki.markdown
+UltiSnipsAddFiletypes vimwiki.writer
 
 
