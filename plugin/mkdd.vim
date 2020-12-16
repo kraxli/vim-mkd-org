@@ -9,16 +9,17 @@ command! ToggleStatusDown call mkdd#ToggleStatusDown()
 command! -range ToggleStatusRangeUp call mkdd#ToggleStatusRangeUp()
 command! -range -nargs=? NumberedList call mkdd#NumberedList(<f-args>)
 command! TasksOpenHi silent :let @/='^\s*-\s\[\s\]'|set hls
-command! TasksOpen silent :execute 'Fp \V\^\s\*\(\[-+*]\{1}\s[\s]\|\s\*#\{1,6}\.\*\)'|let @/='^\s*-\s\[\s\]'|set hls
-" command! TasksOpen call mkdd#unfold_open_tasks()
+command! TasksOpenFold silent :execute 'Fp \V\^\s\*\(\[-+*]\{1}\s[\s]\|\s\*#\{1,6}\.\*\)'|let @/='^\s*-\s\[\s\]'|set hls
+" command! TasksOpenfold call mkdd#unfold_open_tasks()
+
 command! MoveToEnd call mkdd#moveToEnd() " mkdd#MoveFoldToFileEnd()
 command! MoveSelectionToEnd call mkdd#moveSelectionToEnd()
 
 command! HeaderLevelIncrease call mkdd#HeaderIncrease()
 command! HeaderLevelDecrease call mkdd#HeaderDecrease()
 
-command! FindAllIncompletTasks call mkdd#findAllIncompleteTasks()
-command! FindIncompleteTasks call mkdd#findIncompleteTasks()
+command! TasksOpen call mkdd#findAllIncompleteTasks()
+command! TasksOpenFile call mkdd#findIncompleteTasks()
 
 
 """"""""""""""""""
@@ -32,12 +33,24 @@ augroup mkdd_cmd
   nnoremap <leader>dt  "='@'.strftime("%Y-%m-%d").':'<CR>P
   nnoremap <leader>dr "='@'.strftime("%Y-%m-%d").' - '.strftime("%Y-%m-%d").':'<CR>P
 
-  " move tasked-done (closed folds) to end of file
-  " nnoremap <leader>td :.m $<cr>
-  nnoremap <leader>tm :call MoveFoldToFileEnd()<cr>
-  " <leader>tm on visual block (but the following is rather messy and extremly slow):
-  vnoremap <leader>tm :call MoveFoldToFileEnd()<cr>
+  if !hasmapto('TaksOpenHi')
+    nmap <silent> <leader>th :TasksOpenHi<cr>
+    nnoremap th :TasksOpenHi<cr>
+  endif
 
+  if !hasmapto('TasksOpenFold')
+    nnoremap zT :TasksOpenFold<cr>
+    nnoremap <leader>tz :TasksOpenFold<cr>
+  endif
+
+
+  if !hasmapto('TasksOpen')
+    nmap <silent> <leader>to :TasksOpen<cr>
+  endif
+
+  if !hasmapto('TasksOpenFile')
+    nmap <leader> tf :TasksOpenFile<cr>
+  endif
 
 
   if !hasmapto('NumberedList')
@@ -68,17 +81,12 @@ augroup mkdd_cmd
       \ execute 'vnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status_down . ' :ToggleStatusRangeDown<cr> gv'
   endif
 
-  if !hasmapto('MoveFold2End')
+  if !hasmapto('MoveFoldToEnd')
     nmap <silent> tm :MoveToEnd<cr>
+  endif
+
+  if !hasmapto('MoveSelectionToEnd')
     vmap <silent> tm :call mkdd#moveSelectionToEnd()<cr>
-  endif
-
-  if !hasmapto('TaksOpenHi')
-    nmap <silent> th :TasksOpenHi<cr>
-  endif
-
-  if !hasmapto('TasksOpen')
-    nmap <silent> to :TasksOpen<cr>
   endif
 
   if !hasmapto('HeaderLevelIncrease')

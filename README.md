@@ -11,3 +11,6 @@ tools and support to use vimwiki/markdown files to organize your work, life, ...
 - [ ] replace gx command: defx#util#open(filename)  & `def execute_system of defx`
 - [ ] toggle list/task items on line range
 
+## Commands and default mappings
+
+see [plugin/mkdd.md](./plugin/mkdd.md)
