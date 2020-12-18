@@ -15,9 +15,7 @@ function! pandoc#base(out, ...)
                   \ --variable linkcolor=blue
                   \ --variable citecolor=blue
                   \ --variable urlcolor=blue
-                  \ --filter pandoc-eqnos
-                  \ --filter pandoc-tablenos
-                  \ --filter pandoc-fignos
+                  \ --filter pandoc-xnos
                   \ --variable toccolor=blue ' . executionStr
   " echo runStr
   execute(runStr)
@@ -25,6 +23,9 @@ endfunction
 
 " \ -o %:p:h/html/%:p:t:r.html
 " \ --number-sections or -N
+" \ --filter pandoc-eqnos
+" \ --filter pandoc-tablenos
+" \ --filter pandoc-fignos
 
 " HTML:
 " !pandoc %:p -s -o %:p:h/%:p:t:r.html  --toc --toc-depth=2 --pdf-engine=xelatex --variable geometry=a4paper --variable linkcolor=blue --variable citecolor=blue --variable urlcolor=blue --filter pandoc-eqnos --filter pandoc-tablenos --filter pandoc-fignos --variable toccolor=blue --css /home/dave/.cache/vim/dein/repos/github.com/kraxli/vim-mkd-org//templates/pandoc_killercup.css --mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
