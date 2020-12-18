@@ -143,9 +143,12 @@ pre, code, kbd, samp {
   background: #e6e6e6;
   border-radius: 5px;
   /* text-indent: 1cm hanging each-line; */
-  display: inline-block;
-  margin:1em;
   text-align: left;
+  /* display: inline-block; */
+  display: block;
+  margin:1em;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* #F5F5F5 #d3d3d3*/
