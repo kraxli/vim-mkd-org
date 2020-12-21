@@ -1,6 +1,14 @@
 
 let s:path_plugin = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
 
+if !exists('g:css_template')
+  let g:css_template = 'pandoc_killercup.css'
+endif
+
+if !exists('g:css_template_path')
+  let g:css_template_path = s:path_plugin . '/templates/' . 'pandoc_killercup.css'
+endif
+
 " mathjax help:
 "   - http://docs.mathjax.org/en/latest/web/configuration.html#configuration-using-an-in-line-script
 "   - https://mathjax.github.io/MathJax-demos-web/
@@ -11,10 +19,11 @@ command! Pandoc2Docx :call pandoc#base('docx')
 command! Pandoc2Epub :call pandoc#base('epub')
 command! Pandoc2Html :call pandoc#base('html',
   \ '--mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"',
-  \ '--css ' . s:path_plugin . '/templates/pandoc_killercup.css'
+  \ '--css ' . g:css_template_path
   \ )
 " \ '-M date="`date "+%B %e, %Y"`"'
 
+command! -nargs=* Pandoc2HtmlCustom :call pandoc#html(<f-args>)
 command! PandocPublish :call s:pandocPublish()
 
 command! -nargs=1 PandocLib :pandoc %:p
