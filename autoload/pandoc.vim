@@ -9,7 +9,7 @@ function! pandoc#base(out, ...)
 
   let runStr = 'AsyncRun pandoc %:p
                   \ -s
-                  \ -o %:p:h/%:p:t:r.' . a:out . '
+                  \ -o %:p:h/' . g:subdir_out . '%:p:t:r.' . a:out . '
                   \ --toc
                   \ --toc-depth=2
                   \ --pdf-engine=xelatex
@@ -19,10 +19,11 @@ function! pandoc#base(out, ...)
                   \ --variable urlcolor=blue
                   \ --filter pandoc-xnos
                   \ --variable toccolor=blue ' . executionStr
-  " echo runStr
+  echo runStr
   execute(runStr)
 endfunction
 
+" \ -o ' . g:dir_pandoc_out . ' %:p:t:r ' . a:out . '
 " \ -o %:p:h/html/%:p:t:r.html
 " \ --number-sections or -N
 " \ --filter pandoc-eqnos
