@@ -13,7 +13,11 @@ endif
 "   - http://docs.mathjax.org/en/latest/web/configuration.html#configuration-using-an-in-line-script
 "   - https://mathjax.github.io/MathJax-demos-web/
 
-command! Pandoc2Pdf :call pandoc#base('pdf')
+command! PandocEasy2Docx :AsyncRun pandoc %p -o %:p:r.docx
+command! PandocEasy2Html :AsyncRun pandoc %p -o %:p:r.html
+
+command! Pandoc2Pdf :call pandoc#base('pdf', '--pdf-engine=xelatex')
+command! Pandoc2Tex :call pandoc#base('tex', '--pdf-engine=xelatex')
 command! Pandoc2Doc :call pandoc#base('doc')
 command! Pandoc2Docx :call pandoc#base('docx')
 command! Pandoc2Epub :call pandoc#base('epub')

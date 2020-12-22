@@ -44,4 +44,7 @@ if !exists('g:blog_dir')
   let g:blog_dir =  '~/blog/'
 endif
 
+if !exists('g:subdir_out')
+   let g:subdir_out = 'out/'
+endif
 

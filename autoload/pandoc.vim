@@ -12,14 +12,13 @@ function! pandoc#base(out, ...)
                   \ -o %:p:h/' . g:subdir_out . '%:p:t:r.' . a:out . '
                   \ --toc
                   \ --toc-depth=2
-                  \ --pdf-engine=xelatex
                   \ --variable geometry=a4paper
                   \ --variable linkcolor=blue
                   \ --variable citecolor=blue
                   \ --variable urlcolor=blue
                   \ --filter pandoc-xnos
                   \ --variable toccolor=blue ' . executionStr
-  echo runStr
+  " echo runStr
   execute(runStr)
 endfunction
 
