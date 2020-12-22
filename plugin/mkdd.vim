@@ -82,11 +82,11 @@ augroup mkdd_cmd
   endif
 
   if !hasmapto('MoveFoldToEnd')
-    nmap <silent> tm :MoveToEnd<cr>
+    nmap <silent><leader>tm :MoveToEnd<cr>
   endif
 
   if !hasmapto('MoveSelectionToEnd')
-    vmap <silent> tm :call mkdd#moveSelectionToEnd()<cr>
+    vmap <silent><leader>tm :call mkdd#moveSelectionToEnd()<cr>
   endif
 
   if !hasmapto('HeaderLevelIncrease')
