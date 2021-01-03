@@ -285,5 +285,56 @@ function! mkdd#findAllIncompleteTasks()
   endif
 endfunction
 
+
+function! mkdd#findTags()
+  if exists(':Ag')
+
+    " clean out tags which are not supported
+    let l:mkdd_tag_prefixes= substitute(g:mkdd_tag_prefixes, '+', '', '')
+
+    let l:tag_prefix = join(split(l:mkdd_tag_prefixes, '\zs'), '\|')
+    let l:tag_prefix = substitute(l:tag_prefix, '&', '\\&', '')
+
+    let l:query = '\(\\s:\[a-zA-Z0-9_-\]\{2,\}:\|\\s\('. l:tag_prefix .'\)\[a-zA-Z0-9_-\]\{2,\}\)'
+    let l:options_ag = '--md --color '
+    call fzf#vim#grep('ag ' . l:options_ag . l:query, 1, fzf#vim#with_preview(), 0) " <bang>0
+
+  endif
+endfunction
+
+
+""""""""""""""""""""
+"  fzf completion  "
+""""""""""""""""""""
+
+function! mkdd#references_reducer(line)
+    let pattern2disp = a:line
+
+    " TODO: search for headers, tags, titles and replace accordingly
+
+    " headers
+    let pattern2disp = substitute(substitute(pattern2disp, '.md:\d\+:', '', ''), ' ', '', '')
+    let pattern2disp = substitute(pattern2disp, '#\+', '#', '')
+
+    " title
+    let pattern2disp = substitute(pattern2disp, 'title:.*', '', '')
+
+    return pattern2disp
+endfunction
+
+
+    " inoremap <expr> <c-f> fzf#vim#complete(fzf#wrap({'source': "ag '^#+ ' --md", 'prefix': '^.*$', 'reducer': { lines -> substitute(substitute(lines[0], '.md:\d*:', '', ''), ' ', '', '') }, 'options': '--preview'}))
+    " inoremap <expr> <c-f> fzf#vim#complete(fzf#wrap({'source': "ag '^#+ ' --md", 'prefix': '^.*$', 'reducer': { lines -> substitute(substitute(lines[0], '.md:\d*:', '', ''), ' ', '', '') }, 'options': '--preview-window right:50% ctrl-/'}))
+
+  " let g:zettel_fzf_options = ['--exact', '--tiebreak=end'] " --preview
+  "  'options': '--exact --preview' --preview-window', 'hidden'
+  "    let preview_args = get(g:, 'fzf_preview_window', ['right', 'ctrl-/'])
+  "    let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+
+" Preview window on the upper side of the window with 40% height,
+" hidden by default, ctrl-/ to toggle
+" let g:fzf_preview_window = ['up:40%:hidden', 'ctrl-/']
+
+
 " vim:foldmethod=marker
 

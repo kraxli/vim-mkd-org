@@ -28,6 +28,24 @@ command! TasksOpenFile call mkdd#findIncompleteTasks()
 augroup mkdd_cmd
   autocmd!
 
+  " command! -bang -nargs=* ZettelSearch call zettel#fzf#sink_onefile(<q-args>, 'zettel#fzf#wiki_search')
+  " imap <silent> [[ [[<esc><Plug>ZettelSearchMap
+  " inoremap <expr> <c-f> fzf#vim#complete(fzf#wrap({'source': "ag '^#+ ' --md", 'prefix': '^.*$', 'reducer': { lines -> substitute(substitute(lines[0], '.md:\d*:', '', ''), ' ', '', '') }, 'options': '--preview'}))
+
+" TODO commands:
+" ftplugin/markdown/mappings.vim
+    " command! -bang -nargs=* ZettelSearch call zettel#fzf#sink_onefile(<q-args>, 'zettel#fzf#wiki_search')
+    " imap <silent> [[ [[<esc><Plug>ZettelSearchMap
+    " xnoremap <silent> <Plug>ZettelNewSelectedMap :call zettel#vimwiki#zettel_new_selected()<CR>
+    " xmap z <Plug>ZettelNewSelectedMap
+
+  inoremap <expr> <c-r> fzf#reference_completion()
+      " TODO: 'options:': --preview-window right:50%
+  inoremap <expr> <c-r> fzf#vim#complete(fzf#wrap({'source': "ag '^#\{1,2} \|title:' --md", 'prefix': '^.*$', 'reducer': { lines ->  mkdd#references_reducer(lines[0])},}))
+  " inoremap <expr> <c-r> fzf#vim#complete(fzf#wrap({'source': "ag '^#+ ' --md", 'prefix': '^.*$', 'reducer': { lines ->  mkdd#references_reducer(lines[0])},}))
+
+
+
   noremap <leader>td :VimwikiToggleListItem<cr> $"=strftime(" [@DONE: %Y-%m-%d]")<CR>p
   " http://vim.wikia.com/wiki/Insert_current_date_or_time
   nnoremap <leader>dt  "='@'.strftime("%Y-%m-%d").':'<CR>P
