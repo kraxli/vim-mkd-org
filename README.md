@@ -4,7 +4,11 @@
 
 - skywind3000/asyncrun.vim
 - junegunn/fzf.vim
-- 
+- latex / xelatex (texlive-full)
+- pip3 install pandoc-xnos --upgrade
+- silversearcher (optional)
+- pandoc
+- `pip3 install pandoc-xnos --upgrade`
 
 
 tools and support to use vimwiki/markdown files to organize your work, life, ...
