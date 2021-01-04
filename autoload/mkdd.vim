@@ -310,17 +310,21 @@ endfunction
 """"""""""""""""""""
 "  fzf completion  "
 """"""""""""""""""""
-" §
+
+function! mkdd#get_crusor_expression()
 "     " if getline('.')[col('.')-1] =~ ''
 "     "   l:string = ''
 "     " else
 "     "   l:string = expand("<cword>")
 "     " endif
-"
-"     " get word before cursor
-"     let l:word_list = split(getline('.')[0:col('.')-1], '')
-"     let l:string2search = l:word_list == [] ? '\[a-zA-Z0-9_-:\]\{2,\}' : l:word_list[-1]
-"     let l:string2search = substitute(l:string2search, ':', '', '')
+
+    " get word before cursor
+    let l:word_list = split(getline('.')[0:col('.')-1], '')
+    let l:string2search = l:word_list == [] ? '\[a-zA-Z0-9_-:\]\{2,\}' : l:word_list[-1]
+    let l:string2search = substitute(l:string2search, ':', '', '')
+
+    return l:string2search
+endfunction
 
 
 function! mkdd#references_reducer(line)
