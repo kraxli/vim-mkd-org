@@ -286,8 +286,11 @@ function! mkdd#findAllIncompleteTasks()
 endfunction
 
 
-function! mkdd#findTags()
+function! mkdd#findTags(search_string, bang)
   if exists(':Ag')
+
+    let l:string2search = empty(a:search_string) ? '\[a-zA-Z0-9_-\]\{2,\}' : get(a:, 'search_string', '\[a-zA-Z0-9_-\]\{2,\}')
+    let l:bang = get(a:, 'bang', 0) " get(a:, 2, 0)
 
     " clean out tags which are not supported
     let l:mkdd_tag_prefixes= substitute(g:mkdd_tag_prefixes, '+', '', '')
@@ -295,9 +298,10 @@ function! mkdd#findTags()
     let l:tag_prefix = join(split(l:mkdd_tag_prefixes, '\zs'), '\|')
     let l:tag_prefix = substitute(l:tag_prefix, '&', '\\&', '')
 
-    let l:query = '\(\\s:\[a-zA-Z0-9_-\]\{2,\}:\|\\s\('. l:tag_prefix .'\)\[a-zA-Z0-9_-\]\{2,\}\)'
+    let l:query = ':'. l:string2search .'\\S\*:\|\\s+\('. l:tag_prefix .'\)'. l:string2search .'\\S\*'
     let l:options_ag = '--md --color '
-    call fzf#vim#grep('ag ' . l:options_ag . l:query, 1, fzf#vim#with_preview(), 0) " <bang>0
+
+    return fzf#vim#grep('ag ' . l:options_ag . l:query, 1, fzf#vim#with_preview(), l:bang)
 
   endif
 endfunction
@@ -306,6 +310,18 @@ endfunction
 """"""""""""""""""""
 "  fzf completion  "
 """"""""""""""""""""
+" §
+"     " if getline('.')[col('.')-1] =~ ''
+"     "   l:string = ''
+"     " else
+"     "   l:string = expand("<cword>")
+"     " endif
+"
+"     " get word before cursor
+"     let l:word_list = split(getline('.')[0:col('.')-1], '')
+"     let l:string2search = l:word_list == [] ? '\[a-zA-Z0-9_-:\]\{2,\}' : l:word_list[-1]
+"     let l:string2search = substitute(l:string2search, ':', '', '')
+
 
 function! mkdd#references_reducer(line)
     let pattern2disp = a:line
@@ -318,6 +334,8 @@ function! mkdd#references_reducer(line)
 
     " title
     let pattern2disp = substitute(pattern2disp, 'title:.*', '', '')
+
+    " vimwiki tags
 
     return pattern2disp
 endfunction

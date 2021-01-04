@@ -21,6 +21,11 @@ command! HeaderLevelDecrease call mkdd#HeaderDecrease()
 command! TasksOpen call mkdd#findAllIncompleteTasks()
 command! TasksOpenFile call mkdd#findIncompleteTasks()
 
+" inoremap <expr> <plug>(command-for-plug-functionality)  function2call()
+" imap <c-x><c-k> <plug>(command-for-plug-functionality)
+
+command! -bang -nargs=? TagSearch :call mkdd#findTags(<q-args>, <bang>0)
+
 
 """"""""""""""""""
 "  key mappings  "
@@ -39,7 +44,7 @@ augroup mkdd_cmd
     " xnoremap <silent> <Plug>ZettelNewSelectedMap :call zettel#vimwiki#zettel_new_selected()<CR>
     " xmap z <Plug>ZettelNewSelectedMap
 
-  inoremap <expr> <c-r> fzf#reference_completion()
+  " inoremap <expr> <c-r> fzf#reference_completion()
       " TODO: 'options:': --preview-window right:50%
   inoremap <expr> <c-r> fzf#vim#complete(fzf#wrap({'source': "ag '^#\{1,2} \|title:' --md", 'prefix': '^.*$', 'reducer': { lines ->  mkdd#references_reducer(lines[0])},}))
   " inoremap <expr> <c-r> fzf#vim#complete(fzf#wrap({'source': "ag '^#+ ' --md", 'prefix': '^.*$', 'reducer': { lines ->  mkdd#references_reducer(lines[0])},}))
