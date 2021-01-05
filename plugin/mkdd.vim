@@ -23,7 +23,6 @@ command! TasksOpenFile call mkdd#findIncompleteTasks()
 
 " inoremap <expr> <plug>(command-for-plug-functionality)  function2call()
 " imap <c-x><c-k> <plug>(command-for-plug-functionality)
-
 command! -bang -nargs=? TagSearch :call mkdd#findTags(<q-args>, <bang>0)
 
 

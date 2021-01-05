@@ -298,10 +298,13 @@ function! mkdd#findTags(search_string, bang)
     let l:tag_prefix = join(split(l:mkdd_tag_prefixes, '\zs'), '\|')
     let l:tag_prefix = substitute(l:tag_prefix, '&', '\\&', '')
 
-    let l:query = ':'. l:string2search .'\\S\*:\|\\s+\('. l:tag_prefix .'\)'. l:string2search .'\\S\*'
-    let l:options_ag = '--md --color '
+    " let l:query = ':'. l:string2search .'\\S\*:\|\\s+\('. l:tag_prefix .'\)'. l:string2search .'\\S\*'
+    let l:non_vimwiki_tags = '\|\('. l:tag_prefix .'\)\\S\*'. l:string2search .'\\S\*'  " \R, problem with new line and space before
+    let l:query = ':\\S\*'. l:string2search .'\\S\*:' . l:non_vimwiki_tags
+    let l:options_ag = '--md --color  --ignore-case ' " --ignore-case --smart-case
 
     return fzf#vim#grep('ag ' . l:options_ag . l:query, 1, fzf#vim#with_preview(), l:bang)
+    " return fzf#run(fzf#wrap({'source': 'ag ' . l:options_ag . l:query}, l:bang))
 
   endif
 endfunction
