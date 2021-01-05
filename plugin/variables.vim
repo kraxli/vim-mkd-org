@@ -4,7 +4,8 @@ if !exists('g:mkdd_use_mkdx')
 endif
 
 if !exists('g:mkdd_tag_prefixes')
-  let g:mkdd_tag_prefixes = '!&'
+  " let g:mkdd_tag_prefixes = '!&'
+  let g:mkdd_tag_prefixes = ['!!','&&']
 endif
 
 if !exists('g:mkdd_task_done_symbols')

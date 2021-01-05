@@ -292,15 +292,21 @@ function! mkdd#findTags(search_string, bang)
     let l:string2search = empty(a:search_string) ? '\[a-zA-Z0-9_-\]\{2,\}' : get(a:, 'search_string', '\[a-zA-Z0-9_-\]\{2,\}')
     let l:bang = get(a:, 'bang', 0) " get(a:, 2, 0)
 
+    let l:mkdd_tag_prefixes = deepcopy(g:mkdd_tag_prefixes)
     " clean out tags which are not supported
-    let l:mkdd_tag_prefixes= substitute(g:mkdd_tag_prefixes, '+', '', '')
+    " let l:mkdd_tag_prefixes= substitute(g:mkdd_tag_prefixes, '+', '', '')
+    let l:isin = index(l:mkdd_tag_prefixes, '+')
+    if l:isin != -1
+      remove(l:mkdd_tag_prefixes, l:isin)
+    endif
 
-    let l:tag_prefix = join(split(l:mkdd_tag_prefixes, '\zs'), '\|')
-    let l:tag_prefix = substitute(l:tag_prefix, '&', '\\&', '')
+    " let l:tag_prefix = join(split(l:mkdd_tag_prefixes, '\zs'), '\|')
+    let l:tag_prefix = join(l:mkdd_tag_prefixes, '\|')
+    let l:tag_prefix = substitute(l:tag_prefix, '&', '\\&', 'g')
 
-    " let l:query = ':'. l:string2search .'\\S\*:\|\\s+\('. l:tag_prefix .'\)'. l:string2search .'\\S\*'
     let l:non_vimwiki_tags = '\|\('. l:tag_prefix .'\)\\S\*'. l:string2search .'\\S\*'  " \R, problem with new line and space before
-    let l:query = ':\\S\*'. l:string2search .'\\S\*:' . l:non_vimwiki_tags
+    let l:query = '\[^\(http\)\]:\\S\*'. l:string2search .'\\S\*:' . l:non_vimwiki_tags
+    " let l:query = ':'. l:string2search .'\\S\*:\|\\s+\('. l:tag_prefix .'\)'. l:string2search .'\\S\*'
     let l:options_ag = '--md --color  --ignore-case ' " --ignore-case --smart-case
 
     return fzf#vim#grep('ag ' . l:options_ag . l:query, 1, fzf#vim#with_preview(), l:bang)
