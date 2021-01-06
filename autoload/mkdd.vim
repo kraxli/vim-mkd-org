@@ -286,12 +286,17 @@ function! mkdd#findAllIncompleteTasks()
 endfunction
 
 
-function! mkdd#findTags(search_string, bang)
-  if exists(':Ag')
+function! mkdd#findTags(search_string, bang, exact_match, with_non_vimwiki_tags)
+  if !exists(':Ag')
+    echo 'ag (silver-searcher required)'
+  endif
 
-    let l:string2search = empty(a:search_string) ? '\[a-zA-Z0-9_-\]\{2,\}' : get(a:, 'search_string', '\[a-zA-Z0-9_-\]\{2,\}')
-    let l:bang = get(a:, 'bang', 0) " get(a:, 2, 0)
+  let l:string2search = empty(a:search_string) ? '\[a-zA-Z0-9_-\]\{2,\}' : get(a:, 'search_string', '\[a-zA-Z0-9_-\]\{2,\}')
+  let l:bang = get(a:, 'bang', 0) " get(a:, 2, 0)
+  let l:exact = get(a:, 'exact_match', 0)
+  let l:with_non_vimwiki_tags = get(a:, 'with_non_vimwiki_tags', 0)
 
+  if l:with_non_vimwiki_tags
     let l:mkdd_tag_prefixes = deepcopy(g:mkdd_tag_prefixes)
     " clean out tags which are not supported
     " let l:mkdd_tag_prefixes= substitute(g:mkdd_tag_prefixes, '+', '', '')
@@ -304,15 +309,32 @@ function! mkdd#findTags(search_string, bang)
     let l:tag_prefix = join(l:mkdd_tag_prefixes, '\|')
     let l:tag_prefix = substitute(l:tag_prefix, '&', '\\&', 'g')
 
-    let l:non_vimwiki_tags = '\|\('. l:tag_prefix .'\)\\S\*'. l:string2search .'\\S\*'  " \R, problem with new line and space before
-    let l:query = '\[^\(http\)\]:\\S\*'. l:string2search .'\\S\*:' . l:non_vimwiki_tags
-    " let l:query = ':'. l:string2search .'\\S\*:\|\\s+\('. l:tag_prefix .'\)'. l:string2search .'\\S\*'
-    let l:options_ag = '--md --color  --ignore-case ' " --ignore-case --smart-case
 
-    return fzf#vim#grep('ag ' . l:options_ag . l:query, 1, fzf#vim#with_preview(), l:bang)
-    " return fzf#run(fzf#wrap({'source': 'ag ' . l:options_ag . l:query}, l:bang))
+    if l:exact
+      let l:non_vimwiki_tags = '\|\('. l:tag_prefix .'\)\\S\*'. l:string2search .'\\S\*'  " \R, problem with new line and space before
+    else
+      " default:
+      let l:non_vimwiki_tags = '\|' . '\('. l:tag_prefix .'\)\\S\{2,\}'  " \*
+    endif
 
+  " exclude non vimwiki tag identifiers
+  else
+    let l:non_vimwiki_tags = ''
   endif
+
+  if l:exact
+    let l:query = '\[^\(http\)\(s\?\)\]:\\S\*'. l:string2search .'\\S\*:' . l:non_vimwiki_tags
+  else
+    " default:
+    let l:query = ':\(\?\=\[A-Za-z\]\{1,\}\)\[\\iA-Z0-9_-\]\{2,\}:' . l:non_vimwiki_tags
+    " let l:query = '\[^\(http\)\(s\?\)\]:\(\?\=\[A-Za-z\]\{1,\}\)\\S\{2,\}:' . l:non_vimwiki_tags
+    " let l:query = '\[^\(http\)\(s\?\)\]:\\S\{2,\}:' . l:non_vimwiki_tags
+  endif
+
+  let l:options_ag = '--md --color  --ignore-case ' " --ignore-case --smart-case
+  return fzf#vim#grep('ag ' . l:options_ag . l:query, 1, fzf#vim#with_preview(), l:bang)
+  " return fzf#run(fzf#wrap({'source': 'ag ' . l:options_ag . l:query}, l:bang))
+
 endfunction
 
 
