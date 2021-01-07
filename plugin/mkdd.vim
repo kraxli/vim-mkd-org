@@ -26,9 +26,13 @@ command! TasksOpenFile call mkdd#findIncompleteTasks()
 command! -bang -nargs=? TagSearch :call mkdd#findTags(<q-args>, <bang>0, 0, 1)
 
 
+
 """"""""""""""""""
 "  key mappings  "
 """"""""""""""""""
+" TODO: put to function such that users can set mappings themself
+nmap ç viwsa:Ei
+
 augroup mkdd_cmd
   autocmd!
 

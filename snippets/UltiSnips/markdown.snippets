@@ -1,0 +1,19 @@
+
+###########################
+#  vimwik / Zettelkasten  #
+###########################
+
+# TODO: remove fileending from ${1:file} as input
+snippet linkHyp  "hyperlink to file of current dir" wA
+[`!p snip.rv=os.path.splitext(t[1])[0]+t[2]`](.`!p snip.rv=os.sep`${1:file}${2:#section})$0
+endsnippet
+
+snippet tag "vimwiki tag" w
+:$1:$0
+endsnippet
+
+snippet :: "vimwiki tag" wiA
+:$1:$0
+endsnippet
+
+
