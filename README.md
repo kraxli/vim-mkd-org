@@ -4,6 +4,8 @@
 
 - skywind3000/asyncrun.vim
 - junegunn/fzf.vim
+- michal-h21/vim-zettel
+- (vimwiki/vimwiki)
 - latex / xelatex (texlive-full)
 - pip3 install pandoc-xnos --upgrade
 - silversearcher (optional)

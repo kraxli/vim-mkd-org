@@ -286,15 +286,21 @@ function! mkdd#findAllIncompleteTasks()
 endfunction
 
 
-function! mkdd#findTags(search_string, bang, exact_match, with_non_vimwiki_tags)
-  if !exists(':Ag')
-    echo 'ag (silver-searcher required)'
-  endif
+""""""""""""""""""""
+"  fzf completion  "
+""""""""""""""""""""
 
-  let l:string2search = empty(a:search_string) ? '\[a-zA-Z0-9_-\]\{2,\}' : get(a:, 'search_string', '\[a-zA-Z0-9_-\]\{2,\}')
-  let l:bang = get(a:, 'bang', 0) " get(a:, 2, 0)
+function! mkdd#findTags(search_string, exact_match, with_non_vimwiki_tags)
+
+  let l:tag_pattern_base = '\[A-Za-z0-9-_#~@%\]\{2,\}'
+  " let l:tag_pattern_base = '\\H\{2,\}'
+  let l:newline_string = '\(\?\|\^\|\\h\+\)\\K'
+
+  " let l:string2search = empty(a:search_string) ? '\[a-zA-Z0-9_-\]\{2,\}' : get(a:, 'search_string', '\[a-zA-Z0-9_-\]\{2,\}')
+  let l:string2search = empty(a:search_string) ?  l:tag_pattern_base : get(a:, 'search_string',  l:tag_pattern_base)
+  let l:fullscreen = get(a:, 'bang', 0) " get(a:, 2, 0)
   let l:exact = get(a:, 'exact_match', 0)
-  let l:with_non_vimwiki_tags = get(a:, 'with_non_vimwiki_tags', 0)
+  let l:with_non_vimwiki_tags = get(a:, 'with_non_vimwiki_tags', 0)  " should non-vimwiki-tags be used
 
   if l:with_non_vimwiki_tags
     let l:mkdd_tag_prefixes = deepcopy(g:mkdd_tag_prefixes)
@@ -311,10 +317,10 @@ function! mkdd#findTags(search_string, bang, exact_match, with_non_vimwiki_tags)
 
 
     if l:exact
-      let l:non_vimwiki_tags = '\|\('. l:tag_prefix .'\)\\S\*'. l:string2search .'\\S\*'  " \R, problem with new line and space before
+      let l:non_vimwiki_tags = '\|'. l:newline_string .'\('. l:tag_prefix .'\)\\H\*'. l:string2search .'\\H\*'  " \R, problem with new line and space before
     else
       " default:
-      let l:non_vimwiki_tags = '\|' . '\('. l:tag_prefix .'\)\\S\{2,\}'  " \*
+      let l:non_vimwiki_tags = '\|' . l:newline_string . '\('. l:tag_prefix .'\)'.l:tag_pattern_base  " \*
     endif
 
   " exclude non vimwiki tag identifiers
@@ -323,24 +329,57 @@ function! mkdd#findTags(search_string, bang, exact_match, with_non_vimwiki_tags)
   endif
 
   if l:exact
-    let l:query = '\[^\(http\)\(s\?\)\]:\\S\*'. l:string2search .'\\S\*:' . l:non_vimwiki_tags
+    let l:query = '\[^\(http\)\(s\?\)\]:\\H\*'. l:string2search .'\\H\*:' . l:non_vimwiki_tags
   else
-    " default:
-    let l:query = ':\(\?\=\[A-Za-z\]\{1,\}\)\[\\iA-Z0-9_-\]\{2,\}:' . l:non_vimwiki_tags
+    " default:  (?|^|\h)\K(:\H{2,}:)
+    let l:query = '\(' . l:newline_string . ':'. l:tag_pattern_base .':\)' . l:non_vimwiki_tags
+    " let l:query = l:newline_string . '\(:'. l:tag_pattern_base .':\)' . l:non_vimwiki_tags
+    " let l:query = ':\(\?\=\[A-Za-z\]\{1,\}\)\[\\iA-Z0-9_-\]\{2,\}:' . l:non_vimwiki_tags
     " let l:query = '\[^\(http\)\(s\?\)\]:\(\?\=\[A-Za-z\]\{1,\}\)\\S\{2,\}:' . l:non_vimwiki_tags
     " let l:query = '\[^\(http\)\(s\?\)\]:\\S\{2,\}:' . l:non_vimwiki_tags
   endif
 
-  let l:options_ag = '--md --color  --ignore-case ' " --ignore-case --smart-case
-  return fzf#vim#grep('ag ' . l:options_ag . l:query, 1, fzf#vim#with_preview(), l:bang)
-  " return fzf#run(fzf#wrap({'source': 'ag ' . l:options_ag . l:query}, l:bang))
-
+  return l:query
 endfunction
 
 
-""""""""""""""""""""
-"  fzf completion  "
-""""""""""""""""""""
+function! mkdd#tagsGo2(search_string, bang, exact_match, with_non_vimwiki_tags)
+
+  if !exists(':Ag')
+    echo 'ag (silver-searcher required)'
+  endif
+
+  let search_ext = "*" . vimwiki#vars#get_wikilocal('ext')
+
+
+  let l:string2search = a:search_string
+  let l:with_non_vimwiki_tags = get(a:, 'with_non_vimwiki_tags', 0)  " should non-vimwiki-tags be used
+  let l:exact = get(a:, 'exact_match', 0)
+  let l:fullscreen = get(a:, 'bang', 0) " get(a:, 2, 0)
+
+  let l:query = mkdd#findTags(l:string2search, l:exact, l:with_non_vimwiki_tags)
+
+  let l:options_ag = '--md --color --ignore-case ' " --ignore-case --smart-case
+  let l:specs = {'sink':  function('zettel#fzf#search_open'), 'options': ['--layout=default', '--info=inline'], 'window': { 'width': 0.9, 'height': 0.6 }}
+
+  return fzf#vim#grep('ag ' . l:options_ag . l:query, 1, fzf#vim#with_preview(l:specs), l:fullscreen)
+  " return fzf#vim#grep('ag ' . l:options_ag . l:query,, fzf#vim#with_preview(), l:bang)
+endfunction
+
+
+" TODO: work in progress, function to trigger tag completion and to include in
+" tag snippets
+function! mkdd#tagCompletion()
+
+  let l:string2search = '' " a:search_string
+  let l:exact = 0
+  let l:with_non_vimwiki_tags = 0
+  let l:query = mkdd#findTags(l:string2search, l:exact, l:with_non_vimwiki_tags)
+
+  echo l:query
+  call fzf#vim#complete(fzf#wrap('', {'source': "ag " . l:query . " --md", 'options': ['--layout=default', '--info=inline'], 'prefix': mkdd#get_crusor_expression(), 'reducer': { lines ->  s:tag_reducer(lines[0])}, 'window': { 'width': 0.9, 'height': 0.6, 'xoffset': 0.5 }}))
+
+endfunction
 
 function! mkdd#get_crusor_expression()
 "     " if getline('.')[col('.')-1] =~ ''
@@ -352,7 +391,7 @@ function! mkdd#get_crusor_expression()
     " get word before cursor
     let l:word_list = split(getline('.')[0:col('.')-1], '')
     let l:string2search = l:word_list == [] ? '\[a-zA-Z0-9_-:\]\{2,\}' : l:word_list[-1]
-    let l:string2search = substitute(l:string2search, ':', '', '')
+    " let l:string2search = substitute(l:string2search, ':', '', '')
 
     return l:string2search
 endfunction
@@ -371,23 +410,28 @@ function! mkdd#references_reducer(line)
     let pattern2disp = substitute(pattern2disp, 'title:.*', '', '')
 
     " vimwiki tags
+    let pattern2disp = substitute(pattern2disp, '.*:\(\S\+\):.*', '#\1', '')
+
+    " other tags
+    let pattern2disp = substitute(pattern2disp, '.*&&\(\S\+\).*', '#\1', '')
+    let pattern2disp = substitute(pattern2disp, '.*!\(\S\+\).*', '#\1', '')
 
     return pattern2disp
 endfunction
 
 
-    " inoremap <expr> <c-f> fzf#vim#complete(fzf#wrap({'source': "ag '^#+ ' --md", 'prefix': '^.*$', 'reducer': { lines -> substitute(substitute(lines[0], '.md:\d*:', '', ''), ' ', '', '') }, 'options': '--preview'}))
-    " inoremap <expr> <c-f> fzf#vim#complete(fzf#wrap({'source': "ag '^#+ ' --md", 'prefix': '^.*$', 'reducer': { lines -> substitute(substitute(lines[0], '.md:\d*:', '', ''), ' ', '', '') }, 'options': '--preview-window right:50% ctrl-/'}))
+function! s:tag_reducer(line)
+    let pattern2disp = a:line
 
-  " let g:zettel_fzf_options = ['--exact', '--tiebreak=end'] " --preview
-  "  'options': '--exact --preview' --preview-window', 'hidden'
-  "    let preview_args = get(g:, 'fzf_preview_window', ['right', 'ctrl-/'])
-  "    let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+    " vimwiki tags
+    let pattern2disp = substitute(pattern2disp, '.*:\(\S\+\):.*', '\1', '')
 
-" Preview window on the upper side of the window with 40% height,
-" hidden by default, ctrl-/ to toggle
-" let g:fzf_preview_window = ['up:40%:hidden', 'ctrl-/']
+    " other tags
+    let pattern2disp = substitute(pattern2disp, '.*&&\(\S\+\).*', '\1', '')
+    let pattern2disp = substitute(pattern2disp, '.*!\(\S\+\).*', '\1', '')
 
+    return pattern2disp
+endfunction
 
 " vim:foldmethod=marker
 
