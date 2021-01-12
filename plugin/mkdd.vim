@@ -37,10 +37,11 @@ augroup mkdd_cmd
   autocmd!
 
   " ---- FZF: include file/header matching expression ----
+  "  TODO: how to treat <expr> as input??
   au FileType markdown,vimwiki inoremap <expr> <c-r> fzf#vim#complete(fzf#wrap({'source': "ag '\(\(\(^\h*#+\)\\h+\[^#\]\)\|\(title:.*\)\|\(.*:\\H+:.*\)\|\(.*&&\\H+\\h.*\)\|\(.*!\\H+\\h.*\)\)' --md", 'options': ['--layout=default', '--info=inline'], 'prefix': mkdd#get_crusor_expression(), 'reducer': { lines ->  mkdd#references_reducer(lines[0])},}))
   " inoremap <expr> <c-r> fzf#vim#complete(fzf#wrap({'source': "ag '^#\{1,2} \|title:' --md", 'prefix': '^.*$', 'reducer': { lines ->  mkdd#references_reducer(lines[0])},}))
 
-  " au FileType markdown,vimwiki inoremap <expr> <c-r> mkdd#tagCompletion()
+  " au FileType markdown,vimwiki inoremap <expr> <c-r> pumvisible() ? "\<esc>"" mkdd#tagCompletion() : mkdd#tagCompletion()
 
 
   noremap <leader>td :VimwikiToggleListItem<cr> $"=strftime(" [@DONE: %Y-%m-%d]")<CR>p

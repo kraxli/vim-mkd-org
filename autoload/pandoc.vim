@@ -39,7 +39,6 @@ endfunction
 function! pandoc#html(...)
   let path_plugin = get(a:, 2, s:path_plugin)
   let css_template = path_plugin . '/templates/' . get(a:, 1, 'pandoc_killercup.css')
-  echo css_template
   call pandoc#base('html',
   \ '--mathjax="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"',
   \ '--css ' . css_template

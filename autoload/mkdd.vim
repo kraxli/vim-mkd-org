@@ -367,17 +367,23 @@ function! mkdd#tagsGo2(search_string, bang, exact_match, with_non_vimwiki_tags)
 endfunction
 
 
+" go to headers, tags, titles, ...
+" :MdoGo2  :Go2
+function! mkdd#go2()
+endfunction
+
+
 " TODO: work in progress, function to trigger tag completion and to include in
-" tag snippets
+" tag snippets. How to treat <expr> as input?
 function! mkdd#tagCompletion()
 
   let l:string2search = '' " a:search_string
   let l:exact = 0
   let l:with_non_vimwiki_tags = 0
   let l:query = mkdd#findTags(l:string2search, l:exact, l:with_non_vimwiki_tags)
+  let l:options_ag = ' --md --color --ignore-case ' " --ignore-case --smart-case
 
-  echo l:query
-  call fzf#vim#complete(fzf#wrap('', {'source': "ag " . l:query . " --md", 'options': ['--layout=default', '--info=inline'], 'prefix': mkdd#get_crusor_expression(), 'reducer': { lines ->  s:tag_reducer(lines[0])}, 'window': { 'width': 0.9, 'height': 0.6, 'xoffset': 0.5 }}))
+  return fzf#vim#complete(fzf#wrap('', {'source': "ag " . l:query . l:options_ag, 'options': ['--layout=default', '--info=inline'], 'prefix': mkdd#get_crusor_expression(), 'reducer': { lines ->  s:tag_reducer(lines[0])}, 'window': { 'width': 0.9, 'height': 0.6, 'xoffset': 0.5 }}))
 
 endfunction
 

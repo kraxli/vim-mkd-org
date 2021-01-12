@@ -5,6 +5,9 @@
 " Remark:
 " TODO:
 
+if !exists('g:mkdd_org_global_variables')
+  execute 'source' fnamemodify(expand('<sfile>'), ':h:h:h').'/plugin/variables.vim'
+endif
 
 """""""""""""""
 "  functions  "
