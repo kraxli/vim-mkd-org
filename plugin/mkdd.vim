@@ -51,7 +51,6 @@ augroup mkdd_cmd
 
   if !hasmapto('TaksOpenHi')
     nmap <silent> <leader>th :TasksOpenHi<cr>
-    nnoremap th :TasksOpenHi<cr>
   endif
 
   if !hasmapto('TasksOpenFold')
@@ -70,7 +69,7 @@ augroup mkdd_cmd
 
 
   if !hasmapto('NumberedList')
-    au Filetype markdown,text execute 'vnoremap <silent> <buffer> tln :NumberedList<cr>'
+    au Filetype markdown,text execute 'vnoremap <silent> <buffer> <leader>tln :NumberedList<cr>'
   endif
 
   if !hasmapto('ToggleStatusUp')
