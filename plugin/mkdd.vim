@@ -18,8 +18,8 @@ command! MoveSelectionToEnd call mkdd#moveSelectionToEnd()
 command! HeaderLevelIncrease call mkdd#HeaderIncrease()
 command! HeaderLevelDecrease call mkdd#HeaderDecrease()
 
-command! TasksOpen call mkdd#findAllIncompleteTasks()
-command! TasksOpenCurrent call mkdd#findIncompleteTasks()
+command! -bang TasksOpen call mkdd#findAllIncompleteTasks(<bang>0)
+command! -bang TasksOpenCurrent call mkdd#findIncompleteTasks(<bang>0)
 
 " inoremap <expr> <plug>(command-for-plug-functionality)  function2call()
 " imap <c-x><c-k> <plug>(command-for-plug-functionality)

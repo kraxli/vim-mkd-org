@@ -271,16 +271,28 @@ endfunction
 "  source: https://vimwiki.github.io/vimwikiwiki/Tips%20and%20Snips.html  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! mkdd#findIncompleteTasks()
-  lvimgrep /- \[[^xX]\]/ %:p
-  lopen
+let s:fzf_spec = {'options': ['--layout=reverse', '--info=inline', '--exact', '--tiebreak=end'], 'down': '40%'}
+let s:query_task_open = '- \[\h{1}\]'
+let s:options_ag = '--color --ignore-case  --column'
+
+function! mkdd#findIncompleteTasks(fullscreen)
+  if executable('ag')
+    let l:file = substitute(expand('%'), '\.', '\\.', 'g')
+    let l:options_ag = s:options_ag .  ' --file-search-regex ' . l:file
+    call fzf#vim#ag(s:query_task_open, l:options_ag, fzf#vim#with_preview(s:fzf_spec), a:fullscreen)
+  else
+    lvimgrep /- \[[^xX]\]/ %:p
+    lopen
+  endif
 endfunction
 
-function! mkdd#findAllIncompleteTasks()
+function! mkdd#findAllIncompleteTasks(fullscreen)
   if exists(':Ag')
-    Ag - \[[^xX]\]
+    " Ag - \[[^xX\-]\]
+    " Ag - \[\h{1}\]
+    call fzf#vim#ag(s:query_task_open, s:options_ag . ' --md', fzf#vim#with_preview(s:fzf_spec), a:fullscreen)
   else
-    VimwikiSearch /- \[[^xX]\]/
+    VimwikiSearch /- \[[^xX\-]\]/
     lopen
   endif
 endfunction
