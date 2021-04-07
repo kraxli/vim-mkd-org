@@ -134,3 +134,4 @@ augroup END
 
 " space triggers shot-f (motion). So I reset it (quick and diry solution)
 nnoremap <space> <space>
+" nnoremap <space> <Nop>
