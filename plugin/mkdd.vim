@@ -133,5 +133,5 @@ augroup mkdd_cmd
 augroup END
 
 " space triggers shot-f (motion). So I reset it (quick and diry solution)
-nnoremap <space> <space>
-" nnoremap <space> <Nop>
+nnoremap <space> <Nop>
+" nnoremap <space> <space>
