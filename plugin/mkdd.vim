@@ -64,7 +64,7 @@ augroup mkdd_cmd
   endif
 
   if !hasmapto('TasksOpenCurrent')
-    nmap <leader> tc :TasksOpenCurrent<cr>
+    nmap <leader>tc :TasksOpenCurrent<cr>
   endif
 
 
@@ -72,7 +72,7 @@ augroup mkdd_cmd
     au Filetype markdown,text execute 'vnoremap <silent> <buffer> <leader>tln :NumberedList<cr>'
   endif
 
-  if !hasmapto('ToggleStatusUp')
+  if !hasmapto('ToggleStatusUp') && g:mkdd_mapping_switch_status != 0
     " TODO let filetype list be determined by the user via a variable
     au Filetype markdown,text
       \ execute 'nnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status . ' :ToggleStatusUp<cr>'
@@ -84,7 +84,7 @@ augroup mkdd_cmd
       \ execute 'vnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status . ' :ToggleStatusRangeUp<cr> gv'
   endif
 
-  if !hasmapto('ToggleStatusDown')
+  if !hasmapto('ToggleStatusDown')  && g:mkdd_mapping_switch_status_down != 0
     " TODO let filetype list be determined by the user via a variable
     au Filetype markdown,text
       \ execute 'nnoremap <silent> <buffer> ' . g:mkdd_mapping_switch_status_down . ' :ToggleStatusDown<cr>'
@@ -124,13 +124,13 @@ augroup mkdd_cmd
     nmap <silent> <Leader>wx :FindIncompleteTasks<cr>
   endif
 
-
   au Filetype markdown,text
     \ execute 'nnoremap <silent> <buffer> ' . g:mkdd_wiki_index_key . ' :e ' . g:wiki_dir . ' index.md<CR>'
 
   au Filetype markdown,text
     \ execute 'nnoremap <silent> <buffer> ' . g:mkdd_blog_index_key . ' :e ' . g:blog_dir . ' index.md<CR>'
 
-
-
 augroup END
+
+" space triggers shot-f (motion). So I reset it (quick and diry solution)
+nnoremap <space> <space>
